@@ -3,6 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 
+#define XB_MODE_SET 0x01
+
+#define XB_OP_SET_DIGITAL 0x01
+
+#define XB_VAL_DIGITAL_HIGH 1
+#define XB_VAL_DIGITAL_LOW 0
+
 int main(int argc, char** argv)
 {
     if (argc < 2)
@@ -16,7 +23,7 @@ int main(int argc, char** argv)
 
     if (strcmp(argv[1], "set") == 0)
     {
-        message[1] = 0x01;
+        message[1] = XB_MODE_SET;
 
         if (argc < 4)
         {
@@ -34,17 +41,17 @@ int main(int argc, char** argv)
                 return -1;
             }
 
-            message[2] = 0x01;
+            message[2] = XB_OP_SET_DIGITAL;
             message[3] = pin;
 
             if (strcmp(argv[3], "high") == 0)
             {
-                message[4] = 1;
+                message[4] = XB_VAL_DIGITAL_HIGH;
                 messageLength = 5;
             }
             else if (strcmp(argv[3], "low") == 0)
             {
-                message[4] = 0;
+                message[4] = XB_VAL_DIGITAL_LOW;
                 messageLength = 5;
             }
             else

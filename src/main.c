@@ -1,15 +1,10 @@
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
-#define XB_MODE_SET 0x01
-
-#define XB_OP_SET_DIGITAL 0x01
-#define XB_OP_SET_PWM 0x02
-
-#define XB_VAL_DIGITAL_HIGH 1
-#define XB_VAL_DIGITAL_LOW 0
+#include "x-board.h"
 
 int main(int argc, char** argv)
 {
@@ -19,12 +14,8 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    uint16_t message[] = {36<<1, 0, 0, 0, 0};
-    int messageLength = 0;
-
     if (strcmp(argv[1], "set") == 0)
     {
-        message[1] = XB_MODE_SET;
 
         if (argc < 4)
         {
@@ -42,19 +33,13 @@ int main(int argc, char** argv)
                 return -1;
             }
 
-            message[3] = pin;
-
             if (strcmp(argv[3], "high") == 0)
             {
-                message[2] = XB_OP_SET_DIGITAL;
-                message[4] = XB_VAL_DIGITAL_HIGH;
-                messageLength = 5;
+                xboardSetDigital(pin, true);
             }
             else if (strcmp(argv[3], "low") == 0)
             {
-                message[2] = XB_OP_SET_DIGITAL;
-                message[4] = XB_VAL_DIGITAL_LOW;
-                messageLength = 5;
+                xboardSetDigital(pin, false);
             }
             else if (strncmp(argv[3], "pwm:", 4) == 0)
             {
@@ -72,9 +57,7 @@ int main(int argc, char** argv)
                     return -1;
                 }
 
-                message[2] = XB_OP_SET_PWM;
-                message[4] = value;
-                messageLength = 5;
+                xboardSetPWM(pin, value);
             }
             else
             {
@@ -93,10 +76,6 @@ int main(int argc, char** argv)
         printf("Unknown mode: %s\n", argv[1]);
         return -1;
     }
-
-    int i2c_handle = i2c_open(2);
-
-    i2c_send_sequence(i2c_handle, message, messageLength, 0);
 
     return 0;
 }

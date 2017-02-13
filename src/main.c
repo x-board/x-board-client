@@ -6,6 +6,7 @@
 #define XB_MODE_SET 0x01
 
 #define XB_OP_SET_DIGITAL 0x01
+#define XB_OP_SET_PWM 0x02
 
 #define XB_VAL_DIGITAL_HIGH 1
 #define XB_VAL_DIGITAL_LOW 0
@@ -41,17 +42,32 @@ int main(int argc, char** argv)
                 return -1;
             }
 
-            message[2] = XB_OP_SET_DIGITAL;
             message[3] = pin;
 
             if (strcmp(argv[3], "high") == 0)
             {
+                message[2] = XB_OP_SET_DIGITAL;
                 message[4] = XB_VAL_DIGITAL_HIGH;
                 messageLength = 5;
             }
             else if (strcmp(argv[3], "low") == 0)
             {
+                message[2] = XB_OP_SET_DIGITAL;
                 message[4] = XB_VAL_DIGITAL_LOW;
+                messageLength = 5;
+            }
+            else if (strncmp(argv[3], "pwm:", 4) == 0)
+            {
+                long value = strtol(argv[3] + 4, 0, 10);
+
+                if (value < 0 || value > 255)
+                {
+                    printf("Invalid value for 'set <pin> pwm': %s\n", argv[3]);
+                    return -1;
+                }
+
+                message[2] = XB_OP_SET_PWM;
+                message[4] = value;
                 messageLength = 5;
             }
             else

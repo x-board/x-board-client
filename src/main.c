@@ -66,6 +66,12 @@ int main(int argc, char** argv)
                     return -1;
                 }
 
+                if (pin != 1 && pin != 4)
+                {
+                    printf("Invalid pin for 'set <pin> pwm': %d\n", pin);
+                    return -1;
+                }
+
                 message[2] = XB_OP_SET_PWM;
                 message[4] = value;
                 messageLength = 5;

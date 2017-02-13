@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 
             if (pin != 1 && (pin < 3 || pin > 5))
             {
-                printf("Invalid pin number for 'set'\n");
+                printf("Invalid pin number for 'set': %d\n", pin);
                 return -1;
             }
 
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 
                 if (value < 0 || value > 255)
                 {
-                    printf("Invalid value for 'set <pin> pwm': %s\n", argv[3]);
+                    printf("Invalid value for 'set <pin> pwm': %d\n", value);
                     return -1;
                 }
 

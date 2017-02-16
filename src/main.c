@@ -6,31 +6,48 @@
 
 #include "x-board.h"
 
+int invalidFormat()
+{
+    printf("\n");
+    printf("x-board expects a command in one of the following formats:\n");
+    printf("\n");
+    printf("x-board set pin:<0-255> <high|low>\n");
+    printf("x-board set pin:<0-255> pwm:<0-255>\n");
+    printf("\n");
+
+    return -1;
+}
+
+int invalidPin(int pin)
+{
+    printf("This board does not have a pin %d.\n", pin);
+
+    return -1;
+}
+
+int invalidPinFunctionality(long pin, char* functionality)
+{
+    printf("This board does not support %s on pin %d.\n", functionality, pin);
+
+    return -1;
+}
+
 int main(int argc, char** argv)
 {
-    if (argc < 2)
+    if (argc < 4)
     {
-        printf("No mode or operation specified\n");
-        return -1;
+        return invalidFormat();
     }
 
     if (strcmp(argv[1], "set") == 0)
     {
-
-        if (argc < 4)
-        {
-            printf("Not enough arguments for 'set'\n");
-            return -1;
-        }
-
         if (strncmp(argv[2], "pin:", 2) == 0)
         {
             long pin = strtol(argv[2] + 4, 0, 10);
 
             if (pin != 1 && (pin < 3 || pin > 5))
             {
-                printf("Invalid pin number for 'set': %d\n", pin);
-                return -1;
+                return invalidPin(pin);
             }
 
             if (strcmp(argv[3], "high") == 0)
@@ -47,34 +64,29 @@ int main(int argc, char** argv)
 
                 if (value < 0 || value > 255)
                 {
-                    printf("Invalid value for 'set <pin> pwm': %d\n", value);
-                    return -1;
+                    return invalidFormat();
                 }
 
                 if (pin != 1 && pin != 4)
                 {
-                    printf("Invalid pin for 'set <pin> pwm': %d\n", pin);
-                    return -1;
+                    return invalidPinFunctionality(pin, argv[3]);
                 }
 
                 xboardSetPWM(pin, value);
             }
             else
             {
-                printf("Invalid value for 'set <pin>': %s\n", argv[3]);
-                return -1;
+                return invalidFormat();
             }
         }
         else
         {
-            printf("Unexpected argument for 'set'\n");
-            return -1;
+            return invalidFormat();
         }
     }
     else
     {
-        printf("Unknown mode: %s\n", argv[1]);
-        return -1;
+        return invalidFormat();
     }
 
     return 0;

@@ -6,7 +6,9 @@
 #define XB_MODE_SET 0x01
 
 #define XB_OP_SET_DIGITAL 0x01
-#define XB_OP_SET_PWM 0x02
+#define XB_OP_SET_ANALOG 0x02
+
+#define XB_ANALOG_MODE_PWM 0x01
 
 #define XB_VAL_DIGITAL_HIGH 1
 #define XB_VAL_DIGITAL_LOW 0
@@ -30,7 +32,7 @@ void xboardSetDigital(uint8_t pin, bool on)
 
 void xboardSetPWM(uint8_t pin, uint8_t value)
 {
-    uint16_t message[] = {36<<1, XB_MODE_SET, XB_OP_SET_PWM, pin, value};
+    uint16_t message[] = {36<<1, XB_MODE_SET, XB_OP_SET_ANALOG, XB_ANALOG_MODE_PWM, pin, value};
 
-    sendMessage(message, 5);
+    sendMessage(message, 6);
 }

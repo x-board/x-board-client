@@ -1,34 +1,31 @@
 
-#include <cstdint>
-#include <cstdbool>
-#include <cstdio>
 #include <cstring>
-#include <cstdlib>
+#include <iostream>
 
 #include "x-board.hpp"
 
 int invalidFormat()
 {
-    printf("\n");
-    printf("x-board expects a command in one of the following formats:\n");
-    printf("\n");
-    printf("x-board set pin:<0-255> <high|low>\n");
-    printf("x-board set pin:<0-255> pwm:<0-255>\n");
-    printf("\n");
+    std::cout << std::endl;
+    std::cout << "x-board expects a command in one of the following formats:" << std::endl;
+    std::cout << std::endl;
+    std::cout << "x-board set pin:<0-255> <high|low>" << std::endl;
+    std::cout << "x-board set pin:<0-255> pwm:<0-255>" << std::endl;
+    std::cout << std::endl;
 
     return -1;
 }
 
 int invalidPin(int pin)
 {
-    printf("This board does not have a pin %d.\n", pin);
+    std::cout << "This board does not have a pin " << pin << "." << std::endl;
 
     return -1;
 }
 
 int invalidPinFunctionality(long pin, char* functionality)
 {
-    printf("This board does not support %s on pin %d.\n", functionality, pin);
+    std::cout << "This board does not support " << functionality << " on pin " << pin << "." << std::endl;
 
     return -1;
 }

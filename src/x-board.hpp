@@ -1,6 +1,7 @@
 
 #include <stdint.h>
-#include <stdbool.h>
+#include <vector>
 
 void xboardSetDigital(uint8_t pin, bool on);
 void xboardSetPWM(uint8_t pin, uint8_t value);
+bool xboardPing();

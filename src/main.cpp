@@ -35,6 +35,27 @@ int main(int argc, char** argv)
 {
     std::vector<std::string> args(argv, argv + argc);
 
+    if (args.size() < 1)
+    {
+        invalidFormat();
+    }
+
+    if (args[1] == "ping")
+    {
+        if (xboardPing())
+        {
+            std::cout << "Pong!" << std::endl;
+
+            return 0;
+        }
+        else
+        {
+            std::cout << "*chirp* *chirp*" << std::endl;
+
+            return -1;
+        }
+    }
+
     if (args.size() < 4)
     {
         return invalidFormat();

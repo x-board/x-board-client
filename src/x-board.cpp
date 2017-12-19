@@ -9,7 +9,10 @@ extern "C"
   #include "../lsquaredc/lsquaredc.h"
 }
 
+#define XB_MODE_ADMIN 0x00
 #define XB_MODE_SET 0x01
+
+#define XB_OP_PING 0x01
 
 #define XB_OP_SET_DIGITAL 0x01
 #define XB_OP_SET_ANALOG 0x02
@@ -18,6 +21,8 @@ extern "C"
 
 #define XB_VAL_DIGITAL_HIGH (uint8_t)0x01
 #define XB_VAL_DIGITAL_LOW (uint8_t)0x00
+
+#define XB_RESPONSE_PONG 0x01
 
 
 int countReads(std::vector<uint16_t> message)
@@ -72,4 +77,13 @@ void xboardSetPWM(uint8_t pin, uint8_t value)
     std::vector<uint16_t> message = {writeAddress(36), XB_MODE_SET, XB_OP_SET_ANALOG, XB_ANALOG_MODE_PWM, pin, value};
 
     sendMessage(message);
+}
+
+bool xboardPing()
+{
+    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_ADMIN, XB_OP_PING, I2C_RESTART, readAddress(36), I2C_READ};
+
+    std::vector<uint8_t> response = sendMessage(message);
+
+    return response[0] == XB_RESPONSE_PONG;
 }

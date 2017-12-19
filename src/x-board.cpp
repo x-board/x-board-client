@@ -13,6 +13,8 @@ extern "C"
 #define XB_MODE_SET 0x01
 
 #define XB_OP_PING 0x01
+#define XB_OP_LIST_PINS_LENGTH 0x02
+#define XB_OP_LIST_PINS 0x03
 
 #define XB_OP_SET_DIGITAL 0x01
 #define XB_OP_SET_ANALOG 0x02
@@ -86,4 +88,19 @@ bool xboardPing()
     std::vector<uint8_t> response = sendMessage(message);
 
     return response[0] == XB_RESPONSE_PONG;
+}
+
+std::vector<uint8_t> xboardListPins()
+{
+    std::vector<uint16_t> lengthMessage = {writeAddress(36), XB_MODE_ADMIN, XB_OP_LIST_PINS_LENGTH, I2C_RESTART, readAddress(36), I2C_READ };
+    std::vector<uint8_t> length = sendMessage(lengthMessage);
+
+    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_ADMIN, XB_OP_LIST_PINS, I2C_RESTART, readAddress(36)};
+
+    for (int i = 0; i < length[0]; i++)
+    {
+        message.push_back(I2C_READ);
+    }
+
+    return sendMessage(message);
 }

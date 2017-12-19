@@ -56,6 +56,55 @@ int main(int argc, char** argv)
         }
     }
 
+    if (args.size() < 2)
+    {
+        invalidFormat();
+    }
+
+    if (args[1] == "list")
+    {
+        if (args[2] == "pins")
+        {
+            std::vector<uint8_t> pins = xboardListPins();
+
+            bool first = true;
+            bool pair = false;
+            uint8_t leftPin;
+
+            for (uint8_t pin : pins)
+            {
+                if (!pair)
+                {
+                    leftPin = pin;
+                    pair = true;
+                    continue;
+                }
+
+                pair = false;
+
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    std::cout << ", ";
+                }
+
+                std::cout << (int)leftPin;
+
+                if (leftPin != pin)
+                {
+                    std::cout << "-" << (int)pin;
+                }
+            }
+
+            std::cout << std::endl;
+
+            return 0;
+        }
+    }
+
     if (args.size() < 4)
     {
         return invalidFormat();

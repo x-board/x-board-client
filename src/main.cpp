@@ -3,8 +3,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
-#include "x-board.h"
+#include "x-board.hpp"
 
 int invalidFormat()
 {

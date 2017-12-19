@@ -1,7 +1,10 @@
 
-#include "x-board.h"
+#include "x-board.hpp"
 
-#include "../lsquaredc/lsquaredc.h"
+extern "C"
+{
+  #include "../lsquaredc/lsquaredc.h"
+}
 
 #define XB_MODE_SET 0x01
 

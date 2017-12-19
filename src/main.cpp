@@ -1,6 +1,7 @@
 
-#include <cstring>
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include "x-board.hpp"
 
@@ -23,7 +24,7 @@ int invalidPin(int pin)
     return -1;
 }
 
-int invalidPinFunctionality(long pin, char* functionality)
+int invalidPinFunctionality(long pin, std::string functionality)
 {
     std::cout << "This board does not support " << functionality << " on pin " << pin << "." << std::endl;
 
@@ -32,33 +33,35 @@ int invalidPinFunctionality(long pin, char* functionality)
 
 int main(int argc, char** argv)
 {
-    if (argc < 4)
+    std::vector<std::string> args(argv, argv + argc);
+
+    if (args.size() < 4)
     {
         return invalidFormat();
     }
 
-    if (strcmp(argv[1], "set") == 0)
+    if (args[1] == "set")
     {
-        if (strncmp(argv[2], "pin:", 2) == 0)
+        if (args[2].compare(0, 4, "pin:") == 0)
         {
-            long pin = strtol(argv[2] + 4, 0, 10);
+            int pin = std::stoi(args[2].substr(4));
 
             if (pin != 1 && (pin < 3 || pin > 5))
             {
                 return invalidPin(pin);
             }
 
-            if (strcmp(argv[3], "high") == 0)
+            if (args[3] == "high")
             {
                 xboardSetDigital(pin, true);
             }
-            else if (strcmp(argv[3], "low") == 0)
+            else if (args[3] == "low")
             {
                 xboardSetDigital(pin, false);
             }
-            else if (strncmp(argv[3], "pwm:", 4) == 0)
+            else if (args[3].compare(0, 4, "pwm:") == 0)
             {
-                long value = strtol(argv[3] + 4, 0, 10);
+                int value = std::stoi(args[3].substr(4));
 
                 if (value < 0 || value > 255)
                 {
@@ -67,7 +70,7 @@ int main(int argc, char** argv)
 
                 if (pin != 1 && pin != 4)
                 {
-                    return invalidPinFunctionality(pin, argv[3]);
+                    return invalidPinFunctionality(pin, args[3]);
                 }
 
                 xboardSetPWM(pin, value);

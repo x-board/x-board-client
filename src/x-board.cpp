@@ -15,8 +15,8 @@ extern "C"
 
 #define XB_ANALOG_MODE_PWM 0x01
 
-#define XB_VAL_DIGITAL_HIGH 1
-#define XB_VAL_DIGITAL_LOW 0
+#define XB_VAL_DIGITAL_HIGH (uint8_t)0x01
+#define XB_VAL_DIGITAL_LOW (uint8_t)0x00
 
 
 void sendMessage(std::vector<uint16_t>  message)

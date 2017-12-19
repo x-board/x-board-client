@@ -2,6 +2,7 @@
 #include "x-board.hpp"
 
 #include <vector>
+#include <cstdlib>
 
 extern "C"
 {
@@ -19,25 +20,56 @@ extern "C"
 #define XB_VAL_DIGITAL_LOW (uint8_t)0x00
 
 
-void sendMessage(std::vector<uint16_t>  message)
+int countReads(std::vector<uint16_t> message)
 {
+    int reads = 0;
+
+    for (uint16_t b : message)
+    {
+        if (b == I2C_READ)
+        {
+            reads++;
+        }
+    }
+
+    return reads;
+}
+
+std::vector<uint8_t> sendMessage(std::vector<uint16_t>  message)
+{
+    int responseLength = countReads(message);
+    uint8_t* response = (uint8_t*)malloc(responseLength);
+
     int i2c_handle = i2c_open(2);
-
-    i2c_send_sequence(i2c_handle, message.data(), message.size(), 0);
-
+    i2c_send_sequence(i2c_handle, message.data(), message.size(), response);
     i2c_close(i2c_handle);
+
+    std::vector<uint8_t> result(response, response + responseLength);
+    free(response);
+
+    return result;
+}
+
+uint8_t writeAddress(uint8_t address)
+{
+    return address << 1;
+}
+
+uint8_t readAddress(uint8_t address)
+{
+    return (address << 1) | 1;
 }
 
 void xboardSetDigital(uint8_t pin, bool on)
 {
-    std::vector<uint16_t> message = {36<<1, XB_MODE_SET, XB_OP_SET_DIGITAL, pin, on ? XB_VAL_DIGITAL_HIGH : XB_VAL_DIGITAL_LOW};
+    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_SET, XB_OP_SET_DIGITAL, pin, on ? XB_VAL_DIGITAL_HIGH : XB_VAL_DIGITAL_LOW};
 
     sendMessage(message);
 }
 
 void xboardSetPWM(uint8_t pin, uint8_t value)
 {
-    std::vector<uint16_t> message = {36<<1, XB_MODE_SET, XB_OP_SET_ANALOG, XB_ANALOG_MODE_PWM, pin, value};
+    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_SET, XB_OP_SET_ANALOG, XB_ANALOG_MODE_PWM, pin, value};
 
     sendMessage(message);
 }

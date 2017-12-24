@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "x-board.hpp"
+#include "Version.hpp"
 
 int invalidFormat()
 {
@@ -144,6 +145,21 @@ int main(int argc, char** argv)
             {
                 std::cout << "Device with identifier: " << (int)deviceIdentifier << std::endl;
             }
+
+            return 0;
+        }
+        else if (args[2] == "device-version")
+        {
+            Version version = xboardReportDeviceVersion();
+
+            std::cout << (int)version.major << "." << (int)version.minor << "." << (int)version.patch;
+
+            if (version.modifier == 1)
+            {
+                std::cout << "-0.unreleased";
+            }
+
+            std::cout << std::endl;
 
             return 0;
         }

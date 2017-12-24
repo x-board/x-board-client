@@ -18,6 +18,7 @@ extern "C"
 #define XB_OP_LIST_CAPABILITIES_LENGTH 0x04
 #define XB_OP_LIST_CAPABILITIES 0x05
 #define XB_OP_DEVICE_IDENTIFIER 0x06
+#define XB_OP_DEVICE_VERSION 0x07
 
 #define XB_OP_SET_DIGITAL 0x01
 #define XB_OP_SET_ANALOG 0x02
@@ -137,4 +138,13 @@ uint16_t xboardReportDeviceIdentifier()
     std::vector<uint8_t> response = sendMessage(message);
 
     return ((uint16_t)response[0] << 8) + response[1];
+}
+
+Version xboardReportDeviceVersion()
+{
+    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_ADMIN, XB_OP_DEVICE_VERSION, I2C_RESTART, readAddress(36), I2C_READ, I2C_READ, I2C_READ, I2C_READ};
+
+    std::vector<uint8_t> response = sendMessage(message);
+
+    return Version(response[0], response[1], response[2], response[3]);
 }

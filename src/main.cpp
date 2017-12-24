@@ -130,6 +130,24 @@ int main(int argc, char** argv)
             return 0;
         }
     }
+    else if (args[1] == "report")
+    {
+        if (args[2] == "device")
+        {
+            uint16_t deviceIdentifier = xboardReportDeviceIdentifier();
+
+            if (deviceIdentifier == 1)
+            {
+                std::cout << "Digispark" << std::endl;
+            }
+            else
+            {
+                std::cout << "Device with identifier: " << (int)deviceIdentifier << std::endl;
+            }
+
+            return 0;
+        }
+    }
 
     if (args.size() < 4)
     {

@@ -49,6 +49,11 @@ std::vector<uint8_t> sendMessage(std::vector<uint16_t>  message)
     int responseLength = countReads(message);
     uint8_t* response = (uint8_t*)malloc(responseLength);
 
+    for (int i = 0; i < responseLength; i++)
+    {
+        response[i] = -1;
+    }
+
     int i2c_handle = i2c_open(2);
     i2c_send_sequence(i2c_handle, message.data(), message.size(), response);
     i2c_close(i2c_handle);

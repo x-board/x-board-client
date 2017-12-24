@@ -36,13 +36,18 @@ int main(int argc, char** argv)
 {
     std::vector<std::string> args(argv, argv + argc);
 
-    if (args.size() < 1)
+    if (args.size() < 2)
     {
         return invalidFormat();
     }
 
     if (args[1] == "ping")
     {
+        if (args.size() > 2)
+        {
+            return invalidFormat();
+        }
+
         if (xboardPing())
         {
             std::cout << "Pong!" << std::endl;
@@ -57,13 +62,18 @@ int main(int argc, char** argv)
         }
     }
 
-    if (args.size() < 2)
+    if (args.size() < 3)
     {
         return invalidFormat();
     }
 
     if (args[1] == "list")
     {
+        if (args.size() > 3)
+        {
+            return invalidFormat();
+        }
+
         if (args[2] == "pins")
         {
             std::vector<uint8_t> pins = xboardListPins();
@@ -133,6 +143,11 @@ int main(int argc, char** argv)
     }
     else if (args[1] == "report")
     {
+        if (args.size() > 3)
+        {
+            return invalidFormat();
+        }
+
         if (args[2] == "device")
         {
             uint16_t deviceIdentifier = xboardReportDeviceIdentifier();
@@ -172,6 +187,11 @@ int main(int argc, char** argv)
 
     if (args[1] == "set")
     {
+        if (args.size() > 4)
+        {
+            return invalidFormat();
+        }
+
         if (args[2].compare(0, 4, "pin:") == 0)
         {
             int pin = std::stoi(args[2].substr(4));

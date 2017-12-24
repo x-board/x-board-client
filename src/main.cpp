@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 
     if (args.size() < 1)
     {
-        invalidFormat();
+        return invalidFormat();
     }
 
     if (args[1] == "ping")
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
 
     if (args.size() < 2)
     {
-        invalidFormat();
+        return invalidFormat();
     }
 
     if (args[1] == "list")

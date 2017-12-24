@@ -11,6 +11,9 @@ int invalidFormat()
     std::cout << std::endl;
     std::cout << "x-board expects a command in one of the following formats:" << std::endl;
     std::cout << std::endl;
+    std::cout << "x-board ping" << std::endl;
+    std::cout << "x-board list <pins|capabilities>" << std::endl;
+    std::cout << "x-board report <device|device-version>" << std::endl;
     std::cout << "x-board set pin:<0-255> <high|low>" << std::endl;
     std::cout << "x-board set pin:<0-255> pwm:<0-255>" << std::endl;
     std::cout << std::endl;

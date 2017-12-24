@@ -15,6 +15,8 @@ extern "C"
 #define XB_OP_PING 0x01
 #define XB_OP_LIST_PINS_LENGTH 0x02
 #define XB_OP_LIST_PINS 0x03
+#define XB_OP_LIST_CAPABILITIES_LENGTH 0x04
+#define XB_OP_LIST_CAPABILITIES 0x05
 
 #define XB_OP_SET_DIGITAL 0x01
 #define XB_OP_SET_ANALOG 0x02
@@ -98,6 +100,23 @@ std::vector<uint8_t> xboardListPins()
     std::vector<uint16_t> message = {writeAddress(36), XB_MODE_ADMIN, XB_OP_LIST_PINS, I2C_RESTART, readAddress(36)};
 
     for (int i = 0; i < length[0]; i++)
+    {
+        message.push_back(I2C_READ);
+    }
+
+    return sendMessage(message);
+}
+
+std::vector<uint8_t> xboardListCapabilities()
+{
+    std::vector<uint16_t> lengthMessage = {writeAddress(36), XB_MODE_ADMIN, XB_OP_LIST_CAPABILITIES_LENGTH, I2C_RESTART, readAddress(36), I2C_READ, I2C_READ };
+    std::vector<uint8_t> lengthResponse = sendMessage(lengthMessage);
+
+    uint16_t length = (((uint16_t)lengthResponse[0]) << 8) + lengthResponse[1];
+
+    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_ADMIN, XB_OP_LIST_CAPABILITIES, I2C_RESTART, readAddress(36)};
+
+    for (int i = 0; i < length; i++)
     {
         message.push_back(I2C_READ);
     }

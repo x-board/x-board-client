@@ -103,6 +103,32 @@ int main(int argc, char** argv)
 
             return 0;
         }
+        else if (args[2] == "capabilities")
+        {
+            std::vector<uint8_t> capabilities = xboardListCapabilities();
+
+            bool first = true;
+
+            std::cout << "{";
+
+            for (uint8_t capability : capabilities)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    std::cout << ", ";
+                }
+
+                std::cout << (int)capability;
+            }
+
+            std::cout << "}" << std::endl;
+
+            return 0;
+        }
     }
 
     if (args.size() < 4)

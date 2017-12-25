@@ -13,7 +13,7 @@ int invalidFormat()
     std::cout << std::endl;
     std::cout << "x-board ping" << std::endl;
     std::cout << "x-board list <pins|capabilities>" << std::endl;
-    std::cout << "x-board report <device|device-version>" << std::endl;
+    std::cout << "x-board report <device|device-version|protocol-version>" << std::endl;
     std::cout << "x-board set pin:<0-255> <high|low>" << std::endl;
     std::cout << "x-board set pin:<0-255> pwm:<0-255>" << std::endl;
     std::cout << std::endl;
@@ -169,6 +169,48 @@ int main(int argc, char** argv)
         else if (args[2] == "device-version")
         {
             Version version = xboardReportDeviceVersion();
+
+            std::cout << (int)version.major << "." << (int)version.minor << "." << (int)version.patch;
+
+            if (version.modifier == 1)
+            {
+                std::cout << "-0.unreleased";
+            }
+
+            std::cout << std::endl;
+
+            return 0;
+        }
+        else if (args[2] == "protocol-version")
+        {
+            Version version = xboardReportProtocolVersion();
+
+            if (version.major > PROTOCOL_VERSION_MAJOR)
+            {
+                std::cout << "Warning: Board protocol version is incompatible with client protocol version." << std::endl;
+                std::cout << "         Correct functioning of the client is not guaranteed!" << std::endl;
+                std::cout << std::endl;
+            }
+            else if (version.minor > PROTOCOL_VERSION_MINOR)
+            {
+                std::cout << "Warning: Board protocol version is newer than client protocol version." << std::endl;
+                std::cout << "         This should work without problems, but some functionality might not be available." << std::endl;
+                std::cout << std::endl;
+            }
+
+            if (version.major == 0 || version.modifier != 0x00)
+            {
+                std::cout << "Warning: Board protocol version is an unstable version." << std::endl;
+                std::cout << "         Things may not work as expected." << std::endl;
+                std::cout << std::endl;
+            }
+
+            if (PROTOCOL_VERSION_MAJOR == 0 || PROTOCOL_VERSION_MODIFIER != 0x00)
+            {
+                std::cout << "Warning: Client protocol version is an unstable version." << std::endl;
+                std::cout << "         Things may not work as expected." << std::endl;
+                std::cout << std::endl;
+            }
 
             std::cout << (int)version.major << "." << (int)version.minor << "." << (int)version.patch;
 

@@ -16,7 +16,7 @@ int invalidFormat()
     std::cout << "x-board report <device|device-version|protocol-version>" << std::endl;
     std::cout << "x-board set pin:<0-255> <high|low>" << std::endl;
     std::cout << "x-board set pin:<0-255> pwm:<0-255>" << std::endl;
-    std::cout << "x-board set pin:<0-255> blink on:<0-255> off:<0-255>" << std::endl;
+    std::cout << "x-board set pin:<0-255> blink on:<0-255> off:<0-255> [shift:<0-255>]" << std::endl;
     std::cout << std::endl;
 
     return -1;
@@ -283,7 +283,7 @@ int main(int argc, char** argv)
             }
             else if (args[3] == "blink")
             {
-                if (args.size() != 6)
+                if (args.size() != 6 && args.size() != 7)
                 {
                     return invalidFormat();
                 }
@@ -302,7 +302,23 @@ int main(int argc, char** argv)
 
                 int offTime = std::stoi(args[5].substr(4));
 
-                xboardSetDigitalBlink(pin, onTime, offTime);
+                uint8_t shiftTime;
+
+                if (args.size() == 6)
+                {
+                    shiftTime = 0;
+                }
+                else
+                {
+                    if (args[6].compare(0, 6, "shift:") != 0)
+                    {
+                        return invalidFormat();
+                    }
+
+                    shiftTime = std::stoi(args[6].substr(6));
+                }
+
+                xboardSetDigitalBlink(pin, onTime, offTime, shiftTime);
             }
             else
             {

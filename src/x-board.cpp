@@ -94,9 +94,9 @@ void xboardSetPWM(uint8_t pin, uint8_t value)
     sendMessage(message);
 }
 
-void xboardSetDigitalBlink(uint8_t pin, uint8_t onTime, uint8_t offTime)
+void xboardSetDigitalBlink(uint8_t pin, uint8_t onTime, uint8_t offTime, uint8_t shiftTime)
 {
-    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_SET, XB_OP_SET_BLINK, XB_BLINK_MODE_DIGITAL, pin, onTime, offTime};
+    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_SET, XB_OP_SET_BLINK, XB_BLINK_MODE_DIGITAL, pin, onTime, offTime, shiftTime};
 
     sendMessage(message);
 }

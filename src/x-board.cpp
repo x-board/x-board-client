@@ -25,7 +25,7 @@ extern "C"
 #define XB_OP_SET_ANALOG 0x02
 #define XB_OP_SET_BLINK 0x04
 
-#define XB_ANALOG_MODE_PWM 0x01
+#define XB_ANALOG_MODE_PWM 0x02
 
 #define XB_BLINK_MODE_DIGITAL 0x01
 

@@ -11,6 +11,7 @@
 
 void xboardSetDigital(uint8_t pin, bool on);
 void xboardSetPWM(uint8_t pin, uint8_t value);
+void xboardSetDigitalBlink(uint8_t pin, uint8_t onTime, uint8_t offTime);
 std::vector<uint8_t> xboardListPins();
 std::vector<uint8_t> xboardListCapabilities();
 bool xboardPing();

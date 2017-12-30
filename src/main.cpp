@@ -16,6 +16,7 @@ int invalidFormat()
     std::cout << "x-board report <device|device-version|protocol-version>" << std::endl;
     std::cout << "x-board set pin:<0-255> <high|low>" << std::endl;
     std::cout << "x-board set pin:<0-255> pwm:<0-255>" << std::endl;
+    std::cout << "x-board set pin:<0-255> blink on:<0-255> off:<0-255>" << std::endl;
     std::cout << std::endl;
 
     return -1;
@@ -232,11 +233,6 @@ int main(int argc, char** argv)
 
     if (args[1] == "set")
     {
-        if (args.size() > 4)
-        {
-            return invalidFormat();
-        }
-
         if (args[2].compare(0, 4, "pin:") == 0)
         {
             int pin = std::stoi(args[2].substr(4));
@@ -248,14 +244,29 @@ int main(int argc, char** argv)
 
             if (args[3] == "high")
             {
+                if (args.size() > 4)
+                {
+                    return invalidFormat();
+                }
+
                 xboardSetDigital(pin, true);
             }
             else if (args[3] == "low")
             {
+                if (args.size() > 4)
+                {
+                    return invalidFormat();
+                }
+
                 xboardSetDigital(pin, false);
             }
             else if (args[3].compare(0, 4, "pwm:") == 0)
             {
+                if (args.size() > 4)
+                {
+                    return invalidFormat();
+                }
+
                 int value = std::stoi(args[3].substr(4));
 
                 if (value < 0 || value > 255)
@@ -269,6 +280,29 @@ int main(int argc, char** argv)
                 }
 
                 xboardSetPWM(pin, value);
+            }
+            else if (args[3] == "blink")
+            {
+                if (args.size() != 6)
+                {
+                    return invalidFormat();
+                }
+
+                if (args[4].compare(0, 3, "on:") != 0)
+                {
+                    return invalidFormat();
+                }
+
+                int onTime = std::stoi(args[4].substr(3));
+
+                if (args[5].compare(0, 4, "off:") != 0)
+                {
+                    return invalidFormat();
+                }
+
+                int offTime = std::stoi(args[5].substr(4));
+
+                xboardSetDigitalBlink(pin, onTime, offTime);
             }
             else
             {

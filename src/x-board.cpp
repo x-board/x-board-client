@@ -23,8 +23,11 @@ extern "C"
 
 #define XB_OP_SET_DIGITAL 0x01
 #define XB_OP_SET_ANALOG 0x02
+#define XB_OP_SET_BLINK 0x04
 
 #define XB_ANALOG_MODE_PWM 0x01
+
+#define XB_BLINK_MODE_DIGITAL 0x01
 
 #define XB_VAL_DIGITAL_HIGH (uint8_t)0x01
 #define XB_VAL_DIGITAL_LOW (uint8_t)0x00
@@ -87,6 +90,13 @@ void xboardSetDigital(uint8_t pin, bool on)
 void xboardSetPWM(uint8_t pin, uint8_t value)
 {
     std::vector<uint16_t> message = {writeAddress(36), XB_MODE_SET, XB_OP_SET_ANALOG, XB_ANALOG_MODE_PWM, pin, value};
+
+    sendMessage(message);
+}
+
+void xboardSetDigitalBlink(uint8_t pin, uint8_t onTime, uint8_t offTime)
+{
+    std::vector<uint16_t> message = {writeAddress(36), XB_MODE_SET, XB_OP_SET_BLINK, XB_BLINK_MODE_DIGITAL, pin, onTime, offTime};
 
     sendMessage(message);
 }
@@ -158,3 +168,4 @@ Version xboardReportProtocolVersion()
 
     return Version(response[0], response[1], response[2], response[3]);
 }
+

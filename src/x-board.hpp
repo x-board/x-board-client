@@ -10,9 +10,9 @@
 #include "Version.hpp"
 
 #define PROTOCOL_VERSION_MAJOR 0
-#define PROTOCOL_VERSION_MINOR 1
+#define PROTOCOL_VERSION_MINOR 2
 #define PROTOCOL_VERSION_PATCH 0
-#define PROTOCOL_VERSION_MODIFIER 0
+#define PROTOCOL_VERSION_MODIFIER 1
 
 void xboardSetDigital(uint8_t pin, bool on);
 void xboardSetPWM(uint8_t pin, uint8_t value);
